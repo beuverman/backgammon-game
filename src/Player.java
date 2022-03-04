@@ -2,8 +2,7 @@ import java.util.Scanner;
 
 public class Player {
     private Color color;
-    private int move;
-    private int
+   
 
 
     public Player(Color c){
