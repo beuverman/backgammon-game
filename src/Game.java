@@ -4,9 +4,9 @@ public class Game {
     private Board board;
 
     public Game() {
-        p1 = Player(Color.WHITE);
-        p2 = Player(Color.BLACK);
-        board = Board();
+        p1 = new Player(Color.WHITE);
+        p2 = new Player(Color.BLACK);
+        board = new Board();
     }
 
     public void start() {
