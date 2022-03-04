@@ -10,6 +10,18 @@ public class Game {
     }
 
     public void start() {
+        int r1 = p1.firstRoll();
+        int r2 = p2.firstRoll();
+        
+        if (r1 > r2)
+            Turn(p1, p2);
+        else
+            Turn(p2, p1);
+    }
+    
+    public void Turn(Player active, Player opponent) {
+        int[] roll = active.RollTurn();
 
+        Turn(opponent, active);
     }
 }
