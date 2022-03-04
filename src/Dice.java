@@ -1,6 +1,5 @@
 public class Dice {
-  //Import random. 
-  //methods Roll() should return 2 random ints. 
+
     private int roll;
     public Dice() {
     }
