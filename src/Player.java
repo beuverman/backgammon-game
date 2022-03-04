@@ -1,12 +1,12 @@
 import java.util.Scanner;
 
 public class Player {
-    private String color;
+    private Color color;
     private int move;
     private int
 
 
-    public Player(String c){
+    public Player(Color c){
         color = c;
     }
 
