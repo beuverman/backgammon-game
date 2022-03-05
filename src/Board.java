@@ -20,4 +20,15 @@ public class Board {
             };
         }
     }
+
+    public int countPieces(Color c) {
+        int count = bar.getCount(c);
+
+        for (int i = 0; i < points.length; i++) {
+            if (points[i].getColor() == c)
+                count += points[i].getCount();
+        }
+
+        return count;
+    }
 }

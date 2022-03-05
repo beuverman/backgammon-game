@@ -12,7 +12,7 @@ public class Bar {
         this.whiteCount = whiteCount;
     }
 
-    public static int getCount(Color color){
+    public int getCount(Color color){
         if(color == Color.BLACK){
             return blackCount;
         }else if (color == Color.WHITE){

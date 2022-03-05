@@ -1,12 +1,10 @@
+import java.util.Random;
+
 public class Dice {
+    private static final Random rng = new Random();
 
-    private int roll;
-    public Dice() {
-    }
-
-    public int rollDice() {
-        this.roll= (int)(Math.random() * 6 + 1);
-           return roll;
+    public static int roll() {
+        return rng.nextInt(6) + 1;
     }
     
 }
