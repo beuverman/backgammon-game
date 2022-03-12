@@ -7,12 +7,12 @@ import javax.swing.JPanel;
 
 class BarGraphics extends JPanel
 {
-    private Board myParent;
+    private Board board;
     
     public BarGraphics(final Board gui) {
         super(null, true);
-        myParent = gui;
-        myParent.add(this);
+        board = gui;
+        board.add(this);
 
         setBounds(Board.getGeometry().getBarBounds());
         setBackground(Palette.getBarColour());

@@ -1,3 +1,5 @@
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -7,21 +9,23 @@ import javax.swing.JComponent;
 
 public class Triangle extends JComponent
 {
-    private final Board myParent;
-    private final int myPointNumber;
-    private final Polygon myTriangle;
+    private final Board board;
+    private final int pointNumber;
+    private final Polygon polygon;
     private PlayerColor pieceColour;
     private int pieceCount;
     
     public Triangle(int pieceCount, PlayerColor pieceColour, int number, final Board board) {
-        myParent = board;
-        myPointNumber = number;
+        this.board = board;
+        pointNumber = number;
         this.pieceColour = pieceColour;
         this.pieceCount = pieceCount;
 
-        myParent.add(this);
-        setBounds(Board.getGeometry().getPointRectangle(myPointNumber));
-        myTriangle = getTriangle();
+        this.board.add(this);
+        setBounds(Board.getGeometry().getPointRectangle(pointNumber));
+        polygon = getTriangle();
+
+        addMouseListener(addListener());
     }
 
     public int getCount(){
@@ -43,13 +47,43 @@ public class Triangle extends JComponent
     public boolean isBlot(){
         return pieceCount == 1;
     }
+
+    private MouseListener addListener() {
+        return new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                removePiece();
+                repaint();
+            }
+        };
+    }
     
     @Override
     protected void paintComponent(final Graphics g) {
         final Color fg = this.isDarkColoured() ? Palette.getDarkTriangleColour() : Palette.getLightTriangleColour();
         final Graphics2D g2 = (Graphics2D)g;
         g2.setColor(fg);
-        g2.fillPolygon(this.myTriangle);
+        g2.fillPolygon(this.polygon);
         this.paintPieces(g2);
     }
     
@@ -101,7 +135,7 @@ public class Triangle extends JComponent
     }
     
     public boolean pointsUp() {
-        return this.myPointNumber <= 12;
+        return this.pointNumber <= 12;
     }
     
     public boolean pointsDown() {
@@ -109,6 +143,6 @@ public class Triangle extends JComponent
     }
     
     public boolean isDarkColoured() {
-        return this.myPointNumber % 2 == 1;
+        return this.pointNumber % 2 == 1;
     }
 }

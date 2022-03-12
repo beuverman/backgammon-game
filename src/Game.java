@@ -5,11 +5,11 @@ public class Game
 {
    private Player p1;
    private Player p2;
-   private Board aBoard;
+   private Board board;
    private JFrame frame;
 
    public Game() {
-      aBoard = new Board();
+      board = new Board();
       setupFrame();
    }
 
@@ -18,7 +18,7 @@ public class Game
       frame.setSize(800,700);
       frame.setLayout(null);
       frame.setBackground(new java.awt.Color(12,64,8));
-      frame.add(aBoard, BorderLayout.CENTER);
+      frame.add(board, BorderLayout.CENTER);
       frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
       frame.setVisible(true);
 
@@ -49,6 +49,6 @@ public class Game
    }
 
    private boolean Won(Player p) {
-      return aBoard.countPieces(p.getColor()) == 0;
+      return board.countPieces(p.getColor()) == 0;
    }
 }

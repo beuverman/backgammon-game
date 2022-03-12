@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 public class Board extends JPanel
 {
     private final Triangle[] points;
-    private final Bar myBar;
+    private final Bar bar;
     
     public static BoardGeometry getGeometry() {
         return BoardGeometry.getBoardGeometry();
@@ -17,8 +17,8 @@ public class Board extends JPanel
     public Board() {
         super(null, true);
         points = new Triangle[24];
-        myBar = new Bar(this);
-        add(myBar);
+        bar = new Bar(this);
+        add(bar);
 
         setSize(getGeometry().getBoardWidth(), getGeometry().getBoardHeight());
         setMaximumSize(new Dimension(getGeometry().getBoardWidth(), getGeometry().getBoardHeight()));
@@ -49,7 +49,7 @@ public class Board extends JPanel
     //empty board
 
     public int countPieces(PlayerColor c) {
-        int count = myBar.getCount(c);
+        int count = bar.getCount(c);
 
         for (Triangle point : points) {
             if (point.getColor() == c)
