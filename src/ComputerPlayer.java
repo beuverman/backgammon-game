@@ -1,7 +1,5 @@
-import java.util.Random;
-
 public class ComputerPlayer extends Player{
-    public ComputerPlayer(Color c) {
+    public ComputerPlayer(PlayerColor c) {
         super(c);
     }
 

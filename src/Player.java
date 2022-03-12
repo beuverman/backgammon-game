@@ -1,14 +1,12 @@
-import java.util.Scanner;
-
 public class Player {
-    private Color color;
+    private PlayerColor playerColor;
 
-    public Player(Color c){
-        color = c;
+    public Player(PlayerColor c){
+        playerColor = c;
     }
 
-    public Color getColor() {
-        return color;
+    public PlayerColor getColor() {
+        return playerColor;
     }
 
     public int firstRoll(){
