@@ -7,15 +7,22 @@ import javax.swing.JPanel;
 
 public class Board extends JPanel
 {
+    private final Game game;
     private final Triangle[] points;
     private final Bar bar;
+    private Triangle selectedTriangle;
     
     public static BoardGeometry getGeometry() {
         return BoardGeometry.getBoardGeometry();
     }
+
+    public Game getGame() {
+        return game;
+    }
     
-    public Board() {
+    public Board(Game game) {
         super(null, true);
+        this.game = game;
         points = new Triangle[24];
         bar = new Bar(this);
         add(bar);
@@ -30,6 +37,14 @@ public class Board extends JPanel
     
     public Triangle getPoint(int num) {
         return points[num - 1];
+    }
+
+    public void setSelectedTriangle(Triangle t) {
+        selectedTriangle = t;
+    }
+
+    public Triangle getSelectedTriangle() {
+        return selectedTriangle;
     }
 
     private void setInitialBoard() {
@@ -58,6 +73,7 @@ public class Board extends JPanel
 
         return count;
     }
+
     @Override
     protected void paintComponent(final Graphics g) {
         final Graphics2D g2 = (Graphics2D)g;

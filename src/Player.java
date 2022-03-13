@@ -1,12 +1,18 @@
 public class Player {
     private PlayerColor playerColor;
+    private String name;
 
-    public Player(PlayerColor c){
+    public Player(PlayerColor c, String name){
         playerColor = c;
+        this.name = name;
     }
 
     public PlayerColor getColor() {
         return playerColor;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int firstRoll(){

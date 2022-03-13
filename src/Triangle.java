@@ -5,7 +5,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Polygon;
-import javax.swing.JComponent;
+import javax.swing.*;
+import javax.swing.border.MatteBorder;
 
 public class Triangle extends JComponent
 {
@@ -36,12 +37,19 @@ public class Triangle extends JComponent
         return pieceColour;
     }
 
+    private void setColor(PlayerColor color) {
+        pieceColour = color;
+    }
+
     public void addPiece(){
         pieceCount = pieceCount + 1;
     }
 
     public void removePiece(){
+        if (pieceCount == 0) return;
         pieceCount = pieceCount - 1;
+        if (pieceCount == 0)
+            pieceColour = null;
     }
 
     public boolean isBlot(){
@@ -52,7 +60,30 @@ public class Triangle extends JComponent
         return new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                Player p = board.getGame().getActivePlayer();
+                Triangle selected = board.getSelectedTriangle();
+                Triangle caller = (Triangle)e.getComponent();
 
+                if (selected == null && p.getColor() == caller.pieceColour) {
+                    board.setSelectedTriangle(caller);
+                    setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLUE));
+                }
+                else if (selected == caller) {
+                    setBorder(null);
+                    board.setSelectedTriangle(null);
+                }
+                //TODO legal move function
+                //TODO make move function
+                else if (caller.getColor() == p.getColor() || caller.getColor() == null) {
+                    selected.removePiece();
+                    caller.addPiece();
+                    caller.setColor(p.getColor());
+
+                    board.setSelectedTriangle(null);
+                    selected.setBorder(null);
+                    selected.repaint();
+                }
+                caller.repaint();
             }
 
             @Override
@@ -72,8 +103,7 @@ public class Triangle extends JComponent
 
             @Override
             public void mouseExited(MouseEvent e) {
-                removePiece();
-                repaint();
+
             }
         };
     }
