@@ -42,6 +42,7 @@ public class Game
 
    public void start() {
       getPlayers();
+      board.setInitialBoard();
 
       rolls = new int[]{p1.firstRoll(), p2.firstRoll()};
       if (rolls[0] == rolls[1]) {
