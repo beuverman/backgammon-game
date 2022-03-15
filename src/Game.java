@@ -7,6 +7,7 @@ public class Game
    private Player p2;
    private Board board;
    private int[] rolls;
+   private int[] score = new int[2];
 
    private JFrame frame;
    private InfoPanel info;
@@ -32,6 +33,8 @@ public class Game
    private void getPlayers() {
       p1 = new Player(PlayerColor.WHITE, "Player 1");
       p2 = new Player(PlayerColor.BLACK, "Player 2");
+      score[0] = p1.getScore();
+      score[1] = p2.getScore();
    }
 
    private void switchActivePlayer() {
@@ -83,6 +86,10 @@ public class Game
 
    public int[] getRolls() {
       return rolls;
+   }
+   
+   public int[] getScores(){
+      return score;
    }
    
       public void end(){
