@@ -1,5 +1,4 @@
 public class Move {
-	final private Triangle[] points = new Triangle[24];
 	int selected;
 	Color color;
 	int x;
