@@ -34,6 +34,10 @@ public class Player {
         return score;
     }
     
+    public void setScore(int x){
+        score = score + x;
+    }
+    
     public void SelectMove(Turn [] turns){
 
 
