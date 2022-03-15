@@ -34,6 +34,7 @@ public class InfoPanel extends JPanel {
             rollText.append(", ");
         }
         rollText.setLength(rollText.length() - 2);
+        scoreText.setLength(scoreText.length() - 2);
 
         scores.setText(scoreText.toString());
         rolls.setText(rollText.toString());
