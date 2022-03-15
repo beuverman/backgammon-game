@@ -49,15 +49,30 @@ public class Board extends JPanel
 
     private void setInitialBoard() {
         for (int i = 0; i < points.length; i++) {
-            points[i] = switch (i) {
-                case 0 -> new Triangle(2, PlayerColor.BLACK, i+1, this);
-                case 5, 12 -> new Triangle(5, PlayerColor.WHITE, i+1, this);
-                case 7 -> new Triangle(3, PlayerColor.WHITE, i+1, this);
-                case 11, 18 -> new Triangle(5, PlayerColor.BLACK, i+1, this);
-                case 16 -> new Triangle(3, PlayerColor.BLACK, i+1, this);
-                case 23 -> new Triangle(2, PlayerColor.WHITE, i+1, this);
-                default -> new Triangle(0, null, i+1, this);
-            };
+            switch (i) {
+                case 0:
+                    points[i] = new Triangle(2, PlayerColor.BLACK, i+1, this);
+                    break;
+                case 5:
+                case 12:
+                    points[i] = new Triangle(5, PlayerColor.WHITE, i+1, this);
+                    break;
+                case 7:
+                    points[i] = new Triangle(3, PlayerColor.WHITE, i+1, this);
+                    break;
+                case 11:
+                case 18:
+                    points[i] = new Triangle(5, PlayerColor.BLACK, i+1, this);
+                    break;
+                case 16:
+                    points[i] = new Triangle(3, PlayerColor.BLACK, i+1, this);
+                    break;
+                case 23:
+                    points[i] = new Triangle(2, PlayerColor.WHITE, i+1, this);
+                    break;
+                default:
+                    points[i] = new Triangle(0, null, i+1, this);
+            }
         }
     }
 
