@@ -27,15 +27,10 @@ public class Player {
         //SelectMove(dice1,dice2);
         return dice;
     }
+    public void SelectMove(Turn [] turns){
 
-//    public int SelectMove(int d1, int d2){
-//        Move.getpossibleMoves(color, d1, d2);
-//        System.out.println("Select move from the list");
-//        Scanner kbd = new Scanner(System.in);
-//        int move = kbd.nextInt();
-//        //ask the move they want from the possible move
-//        return move;
-//    }
+
+    }
 
 }
 
