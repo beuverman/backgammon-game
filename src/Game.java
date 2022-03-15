@@ -48,7 +48,7 @@ public class Game
          rolls = new int[]{rolls[0], rolls[0], rolls[0], rolls[0]};
       }
 
-      if (rolls[0] < rolls[1])
+      if (rolls[0] > rolls[1])
          switchActivePlayer();
 
          Turn(p1, p2);
