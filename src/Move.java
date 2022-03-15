@@ -1,87 +1,29 @@
 public class Move {
-	int selected;
-	Color color;
-	int x;
-	int board;
-	
-	
-	public Move() {
-		selected = 0;
-  }
+    private Triangle from;
+    private Triangle to;
 
-	public Triangle[] getPossibleMoves(int[] dice, int selected, int board, Color color, int x) {
-		switch(color){
-			case WHITE:
-				if (Bar.whiteCount > 0) {
-					if(Triangle(1, Color.BLACK, (24 - dice[0] + 1)))
-						return Triangle(1, Color.BLACK, (24 - dice[0] + 1));
-					if(Triangle(x, Color.WHITE, (24 - dice[0] + 1)))
-						return Triangle(x, Color.WHITE, (24 - dice[0] + 1));
-					if(Triangle(0, Color.EMPTY, (24 - dice[0] + 1)))
-						return Triangle(0, Color.EMPTY, (24 - dice[0] + 1));
-						
-					if(Triangle(1, Color.BLACK, (24 - dice[1] + 1)))
-						return Triangle(1, Color.BLACK, (24 - dice[1] + 1));
-					if(Triangle(x, Color.WHITE, (24 - dice[1] + 1)))
-						return Triangle(x, Color.WHITE, (24 - dice[1] + 1));
-					if(Triangle(0, Color.EMPTY, (24 - dice[1] + 1)))
-						return Triangle(0, Color.EMPTY, (24 - dice[1] + 1));
-				}
-				else if (Bar.whiteCount = 0) {
-					if(Triangle(1, Color.BLACK, (selected - dice[0])))
-						return Triangle(1, Color.BLACK, (selected - dice[0]));
-					if(Triangle(x, Color.WHITE, (selected - dice[0])))
-						return Triangle(x, Color.WHITE, (selected - dice[0]));
-					if(Triangle(0, Color.EMPTY, (selected - dice[0])))
-						return Triangle(0, Color.EMPTY, (selected - dice[0]));
-					
-					if(Triangle(1, Color.BLACK, (selected - dice[1])))
-						return Triangle(1, Color.BLACK, (selected - dice[1]));
-					if(Triangle(x, Color.WHITE, (selected - dice[1])))
-						return Triangle(x, Color.WHITE, (selected - dice[1]));
-					if(Triangle(0, Color.EMPTY, (selected - dice[1])))
-						return Triangle(0, Color.EMPTY, (selected - dice[1]));
-				}
-				
-			case BLACK:
-				if (Bar.blackCount > 0) {
-					if(Triangle(1, Color.WHITE, dice[0]))
-						return Triangle(1, Color.WHITE, dice[0]);
-					if(Triangle(x, Color.BLACK, dice[0]))
-						return Triangle(x, Color.BLACK, dice[0]);
-					if(Triangle(0, Color.EMPTY, dice[0]))
-						return Triangle(0, Color.EMPTY, dice[0]);
-						
-					if(Triangle(1, Color.WHITE, dice[1]))
-						return Triangle(1, Color.WHITE, dice[1]);
-					if(Triangle(x, Color.BLACK, dice[1]))
-						return Triangle(x, Color.BLACK, dice[1]);
-					if(Triangle(0, Color.EMPTY, dice[1]))
-						return Triangle(0, Color.EMPTY, dice[1]);
-				}
-				else if (Bar.blackCount = 0) {
-					if(Triangle(1, Color.WHITE, (selected + dice[0])))
-						return Triangle(1, Color.WHITE, (selected + dice[0]));
-					if(Triangle(x, Color.BLACK, (selected + dice[0])))
-						return Triangle(x, Color.BLACK, (selected + dice[0]));
-					if(Triangle(0, Color.EMPTY, (selected + dice[0])))
-						return Triangle(0, Color.EMPTY, (selected + dice[0]));
-					
-					if(Triangle(1, Color.WHITE, (selected + dice[1])))
-						return Triangle(1, Color.WHITE, (selected + dice[1]));
-					if(Triangle(x, Color.BLACK, (selected + dice[1])))
-						return Triangle(x, Color.BLACK, (selected + dice[1]));
-					if(Triangle(0, Color.EMPTY, (selected + dice[1])))
-						return Triangle(0, Color.EMPTY, (selected + dice[1]));
-				}
-			}
-	}
-	
+    public Move(Triangle from, Triangle to) {
+        this.from = from;
+        this.to = to;
+    }
 
+    public boolean isLegal(Board board, int roll) {
+        Player p = board.getGame().getActivePlayer();
+        int point1 = from.getPointNumber();
+        int point2 = to.getPointNumber();
 
-	public void makeMove(int[] dice, int selected, int board, Color color, int x) {
-		
-		
-	}
+        if (from.getColor() != p.getColor()) return false;
+        else if (point2 - point1 < 0) return false;
+        else if (board.getBar().getCount(p.getColor()) != 0) return false;
 
-}
+        if (point2 - point1 == 0) {
+            for (int i = 7; i <= 24; i++) {
+                if (board.getPoint(i).getColor() != p.getColor() || board.getPoint(i).getCount() == 0) {
+                    return false;
+                }
+            }
+        }
+        else if (to.getColor() != p.getColor() && to.getCount() > 1) return false;
+
+        return true;
+    }
