@@ -73,6 +73,7 @@ public class Game
          switchActivePlayer();
       }while (true);
       end();
+      findScore(active, opponent);
 
    }
 
@@ -107,5 +108,17 @@ public class Game
 
          }
       });
+   }
+   
+   public void findScore(Player p, Player op) {
+      if (board.countPieces(op.getColor()) > 15 && !board.checkHome(op.getColor())) {
+         p.setScore(3);
+      } else {
+         if (board.countPieces(op.getColor()) > 15 && board.checkHome(op.getColor())) {
+            p.setScore(2);
+         } else {
+            p.setScore(1);
+         }
+      }
    }
 }
