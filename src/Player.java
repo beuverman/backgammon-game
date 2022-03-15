@@ -1,10 +1,12 @@
 public class Player {
     private PlayerColor playerColor;
     private String name;
+    private int score;
 
     public Player(PlayerColor c, String name){
         playerColor = c;
         this.name = name;
+        score = 0;
     }
 
     public PlayerColor getColor() {
@@ -27,6 +29,11 @@ public class Player {
         //SelectMove(dice1,dice2);
         return dice;
     }
+    
+    public int getScore(){
+        return score;
+    }
+    
     public void SelectMove(Turn [] turns){
 
 
