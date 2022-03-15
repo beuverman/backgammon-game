@@ -68,6 +68,7 @@ public class Game
             break;
          switchActivePlayer();
       }while (true);
+      end();
 
    }
 
@@ -81,5 +82,22 @@ public class Game
 
    public int[] getRolls() {
       return rolls;
+   }
+   
+      public void end(){
+      JButton replay = new JButton("Replay?");
+      replay.setFont(new Font("Arial", Font.PLAIN,40));
+      board.setVisible(false);
+      frame.add(replay,BorderLayout.CENTER);
+      frame.repaint();
+      replay.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            setupFrame();
+            start();
+
+
+         }
+      });
    }
 }
