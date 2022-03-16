@@ -13,9 +13,9 @@ public class InfoPanel extends JPanel {
         rolls = new JLabel();
         scores = new JLabel();
 
+        add(scores);
         add(activePlayer);
         add(rolls);
-        add(scores);
     }
 
     public void updateInfo() {
