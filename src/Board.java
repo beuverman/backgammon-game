@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import javax.swing.BorderFactory;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 public class Board extends JPanel
@@ -19,6 +20,10 @@ public class Board extends JPanel
     public Game getGame() {
         return game;
     }
+
+    public Bar getBar() {
+        return bar;
+    }
     
     public Board(Game game) {
         super(null, true);
@@ -32,11 +37,23 @@ public class Board extends JPanel
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLUE));
         setBackground(Palette.getBoardBackgroundColour());
 
-        this.setInitialBoard();
+        for (int i = 0; i < points.length; i++) {
+            points[i] = new Triangle(0, null, i + 1, this);
+        }
     }
     
     public Triangle getPoint(int num) {
         return points[num - 1];
+    }
+
+    public Triangle getPoint(int num, PlayerColor color) {
+        if (color == PlayerColor.WHITE)
+            return getPoint(num);
+        else return getPoint(25-num);
+    }
+
+    public Triangle[] getAllPoints() {
+        return points;
     }
 
     public void setSelectedTriangle(Triangle t) {
@@ -47,31 +64,31 @@ public class Board extends JPanel
         return selectedTriangle;
     }
 
-    private void setInitialBoard() {
+    public void setInitialBoard() {
         for (int i = 0; i < points.length; i++) {
             switch (i) {
                 case 0:
-                    points[i] = new Triangle(2, PlayerColor.BLACK, i+1, this);
+                    points[i].setCountAndColor(2, PlayerColor.BLACK);
                     break;
                 case 5:
                 case 12:
-                    points[i] = new Triangle(5, PlayerColor.WHITE, i+1, this);
+                    points[i].setCountAndColor(5, PlayerColor.WHITE);
                     break;
                 case 7:
-                    points[i] = new Triangle(3, PlayerColor.WHITE, i+1, this);
+                    points[i].setCountAndColor(3, PlayerColor.WHITE);
                     break;
                 case 11:
                 case 18:
-                    points[i] = new Triangle(5, PlayerColor.BLACK, i+1, this);
+                    points[i].setCountAndColor(5, PlayerColor.BLACK);
                     break;
                 case 16:
-                    points[i] = new Triangle(3, PlayerColor.BLACK, i+1, this);
+                    points[i].setCountAndColor(3, PlayerColor.BLACK);
                     break;
                 case 23:
-                    points[i] = new Triangle(2, PlayerColor.WHITE, i+1, this);
+                    points[i].setCountAndColor(2, PlayerColor.WHITE);
                     break;
                 default:
-                    points[i] = new Triangle(0, null, i+1, this);
+                    points[i].setCountAndColor(0, null);
             }
         }
     }
@@ -87,6 +104,40 @@ public class Board extends JPanel
         }
 
         return count;
+    }
+
+    public void makeMove(Position from, Position to) {
+        ArrayList<Turn> turns = game.getPossibleTurns();
+        boolean flag = true;
+
+        for (Turn turn : turns) {
+            if (turn.getMoves()[0].getFrom() == from && turn.getMoves()[0].getTo() == to)
+                flag = false;
+        }
+        if (flag) return;
+
+        int[] rolls = getGame().getRolls();
+        int[] temp = new int[rolls.length - 1];
+
+        flag = false;
+        for (int i = 0, j = 0; i < rolls.length; i++) {
+            if (rolls[i] != Math.abs(from.getPointNumber() - to.getPointNumber()) || flag)
+                temp[j++] = rolls[i];
+            else flag = true;
+        }
+        game.setRolls(temp);
+
+        from.removePiece(getGame().getActivePlayer().getColor());
+        to.addPiece(getGame().getActivePlayer().getColor());
+        game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));
+        repaint();
+    }
+
+    public void clearHighlights() {
+        for (Triangle t : points)
+            t.removeHighlight();
+        bar.removeHighlight();
+        repaint();
     }
 
     @Override

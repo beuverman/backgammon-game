@@ -5,11 +5,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
 import java.awt.Polygon;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 
-public class Triangle extends JComponent
-{
+public class Triangle extends JComponent implements Position {
     private final Board board;
     private final int pointNumber;
     private final Polygon polygon;
@@ -37,15 +37,31 @@ public class Triangle extends JComponent
         return pieceColour;
     }
 
-    private void setColor(PlayerColor color) {
+    public int getPointNumber() {
+        return pointNumber;
+}
+
+    public void setColor(PlayerColor color) {
         pieceColour = color;
     }
 
-    public void addPiece(){
-        pieceCount = pieceCount + 1;
+    public void setCountAndColor(int count, PlayerColor color) {
+        pieceCount = count;
+        pieceColour = color;
     }
 
-    public void removePiece(){
+    public void addPiece(PlayerColor color){
+        if (pieceCount == 0)
+            setColor(color);
+
+        if (pieceCount == 1 && color != pieceColour && pieceColour != null) {
+            board.getBar().addPiece(color.getOtherColor());
+            pieceColour = color;
+        }
+        else pieceCount = pieceCount + 1;
+    }
+
+    public void removePiece(PlayerColor color){
         if (pieceCount == 0) return;
         pieceCount = pieceCount - 1;
         if (pieceCount == 0)
@@ -62,26 +78,27 @@ public class Triangle extends JComponent
             public void mouseClicked(MouseEvent e) {
                 Player p = board.getGame().getActivePlayer();
                 Triangle selected = board.getSelectedTriangle();
+                if (selected != null) selected = board.getPoint(selected.pointNumber);
                 Triangle caller = (Triangle)e.getComponent();
+                caller = board.getPoint(caller.pointNumber);
 
                 if (selected == null && p.getColor() == caller.pieceColour) {
                     board.setSelectedTriangle(caller);
-                    setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLUE));
+                    caller.setBorder(new MatteBorder(3, 3, 3, 3, Color.BLUE));
+                    highlightMoves();
                 }
                 else if (selected == caller) {
-                    setBorder(null);
                     board.setSelectedTriangle(null);
+                    board.clearHighlights();
                 }
                 //TODO legal move function
                 //TODO make move function
-                else if (caller.getColor() == p.getColor() || caller.getColor() == null) {
-                    selected.removePiece();
-                    caller.addPiece();
-                    caller.setColor(p.getColor());
-
+                else if (selected != null && caller != null) {
                     board.setSelectedTriangle(null);
-                    selected.setBorder(null);
-                    selected.repaint();
+                    board.clearHighlights();
+
+                    board.makeMove(selected, caller);
+                    board.repaint();
                 }
                 caller.repaint();
             }
@@ -98,7 +115,17 @@ public class Triangle extends JComponent
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+//                if (board.getSelectedTriangle() == null) {
+//                    Player p = board.getGame().getActivePlayer();
+//                    Triangle caller = (Triangle)e.getComponent();
+//
+//                    board.clearHighlights();
+//
+//                    if (p.getColor() == caller.pieceColour) {
+//                        highlightMoves();
+//                    }
+//                    repaint();
+//                }
             }
 
             @Override
@@ -106,6 +133,27 @@ public class Triangle extends JComponent
 
             }
         };
+    }
+
+    private void highlightMoves() {
+        ArrayList<Turn> turns = board.getGame().getPossibleTurns();
+
+        for (Turn turn : turns) {
+            if (turn.getMoves()[0].getFrom().getPointNumber() == pointNumber)
+                turn.getMoves()[0].getTo().addHighlight();
+        }
+    }
+
+    @Override
+    public void addHighlight() {
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.GREEN));
+        repaint();
+    }
+
+    @Override
+    public void removeHighlight() {
+        setBorder(null);
+        repaint();
     }
     
     @Override

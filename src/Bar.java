@@ -1,7 +1,7 @@
-import java.awt.Graphics2D;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 
-public class Bar extends BarGraphics
+public class Bar extends BarGraphics implements Position
 {
     private int whiteCount;
     private int blackCount;
@@ -35,7 +35,34 @@ public class Bar extends BarGraphics
         else if (color == PlayerColor.BLACK)
             blackCount = count;
     }
-    
+
+    @Override
+    public void addPiece(PlayerColor color) {
+        setCount(color, getCount(color) + 1);
+    }
+
+    @Override
+    public void removePiece(PlayerColor color) {
+        setCount(color, getCount(color) - 1);
+    }
+
+    @Override
+    public int getPointNumber() {
+        return 25;
+    }
+
+    @Override
+    public void addHighlight() {
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.GREEN));
+        repaint();
+    }
+
+    @Override
+    public void removeHighlight() {
+        setBorder(null);
+        repaint();
+    }
+
     @Override
     protected void paintComponent(final Graphics g) {
         final Graphics2D g2 = (Graphics2D)g;
