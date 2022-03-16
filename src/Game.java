@@ -36,7 +36,14 @@ public class Game
       score[0] = p1.getScore();
       score[1] = p2.getScore();
    }
-
+   
+private void getComputerPlayers(){ // WIP getComputerPlayers for choosing player frame
+      p1 = new Player(PlayerColor.BLACK, "Player 1");
+//      p2 = new ComputerPlayer(PlayerColor.WHITE, "Player 2");
+      score[0] = p1.getScore();
+      score[1] = p2.getScore();
+   }
+   
    private void switchActivePlayer() {
       Player temp = p1;
       p1 = p2;
@@ -120,5 +127,34 @@ public class Game
             p.setScore(1);
          }
       }
+   }
+   
+   public void choosePlayer(){ // work in progress chooseplayer code
+      JFrame c = new JFrame("Choose Player ");
+      c.setSize(800,700);
+      JPanel p = new JPanel();
+      JButton choosePlayer = new JButton("Two Players");
+      JButton chooseComputer = new JButton("Computer Player");
+      p.add(choosePlayer, BorderLayout.CENTER);
+      p.add(chooseComputer, BorderLayout.CENTER);
+      c.add(p, BorderLayout.CENTER);
+      choosePlayer.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            getPlayers();
+            c.dispose();
+//               start();
+         }
+      });
+      chooseComputer.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+//            getComputerPlayers();
+            c.dispose();
+//               start();
+         }
+      });
+      c.setVisible(true);
+
    }
 }
