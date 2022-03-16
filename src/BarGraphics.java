@@ -9,12 +9,12 @@ class BarGraphics extends JPanel
 {
     private Board board;
     
-    public BarGraphics(final Board gui) {
+    public BarGraphics(final Board gui, int num) {
         super(null, true);
         board = gui;
         board.add(this);
 
-        setBounds(Board.getGeometry().getBarBounds());
+        setBounds(Board.getGeometry().getBarBounds(num));
         setBackground(Palette.getBarColour());
     }
     

@@ -36,7 +36,7 @@ public class BoardGeometry
     }
     
     public int getBoardWidth() {
-        int answer = this.getBarWidth();
+        int answer = 2 * this.getBarWidth();
         answer += 12 * this.getTriangleWidth();
         return answer;
     }
@@ -63,15 +63,15 @@ public class BoardGeometry
         return BoardGeometry.theGeometry;
     }
     
-    public Rectangle getBarBounds() {
-        return new Rectangle(6 * this.getTriangleWidth(), 0, this.getBarWidth(), this.getBarHeight());
+    public Rectangle getBarBounds(int num) {
+        return new Rectangle(num * (6 * this.getTriangleWidth() + getBarWidth()), 0, this.getBarWidth(), this.getBarHeight());
     }
     
     private Point getPointPoint(final int pointNumber) {
         final boolean isUpper = pointNumber > 12;
         final int ltrIndex = isUpper ? (24 - pointNumber) : (pointNumber - 1);
         final boolean rightOfBar = ltrIndex >= 6;
-        final int x = ltrIndex * this.getTriangleWidth() + (rightOfBar ? this.getBarWidth() : 0);
+        final int x = ltrIndex * this.getTriangleWidth() + (rightOfBar ? getBarWidth() : 0) + getBarWidth();
         final int y = isUpper ? 0 : (this.getBoardHeight() - this.getTriangleHeight());
         return new Point(x, y);
     }

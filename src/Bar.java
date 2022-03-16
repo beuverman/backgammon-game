@@ -14,8 +14,8 @@ public class Bar extends BarGraphics implements Position
         this.whiteCount = whiteCount;
     }
     
-    public Bar(final Board gui) {
-        super(gui);
+    public Bar(final Board gui, int num) {
+        super(gui, num);
         this.setBlackCount(0);
         this.setWhiteCount(0);
     }

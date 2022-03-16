@@ -11,6 +11,7 @@ public class Board extends JPanel
     private final Game game;
     private final Triangle[] points;
     private final Bar bar;
+    private final Bar bearOff;
     private Triangle selectedTriangle;
     
     public static BoardGeometry getGeometry() {
@@ -29,12 +30,14 @@ public class Board extends JPanel
         super(null, true);
         this.game = game;
         points = new Triangle[24];
-        bar = new Bar(this);
+        bar = new Bar(this, 1);
+        bearOff = new Bar(this, 0);
         add(bar);
+        add(bearOff);
 
         setSize(getGeometry().getBoardWidth(), getGeometry().getBoardHeight());
         setMaximumSize(new Dimension(getGeometry().getBoardWidth(), getGeometry().getBoardHeight()));
-        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLUE));
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
         setBackground(Palette.getBoardBackgroundColour());
 
         for (int i = 0; i < points.length; i++) {

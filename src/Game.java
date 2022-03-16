@@ -23,7 +23,7 @@ public class Game
 
    public void setupFrame() {
       frame = new javax.swing.JFrame("Backgammon");
-      frame.setSize(800,700);
+      frame.setSize(860,690);
       frame.setBackground(new java.awt.Color(12,64,8));
       frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
 
