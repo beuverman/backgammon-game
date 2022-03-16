@@ -11,6 +11,7 @@ public class Game
    private Board board;
    private int[] rolls;
    private ArrayList<Turn> possibleTurns;
+   private int[] score = new int[2];
 
    private JFrame frame;
    private InfoPanel info;
@@ -36,8 +37,17 @@ public class Game
    private void getPlayers() {
       p1 = new Player(PlayerColor.WHITE, "Player 1");
       p2 = new Player(PlayerColor.BLACK, "Player 2");
+      score[0] = p1.getScore();
+      score[1] = p2.getScore();
    }
-
+   
+private void getComputerPlayers(){ // WIP getComputerPlayers for choosing player frame
+      p1 = new Player(PlayerColor.BLACK, "Player 1");
+//      p2 = new ComputerPlayer(PlayerColor.WHITE, "Player 2");
+      score[0] = p1.getScore();
+      score[1] = p2.getScore();
+   }
+   
    private void switchActivePlayer() {
       Player temp = p1;
       p1 = p2;
@@ -80,6 +90,7 @@ public class Game
          switchActivePlayer();
       }while (true);
       end();
+      findScore(active, opponent);
 
    }
 
@@ -106,21 +117,64 @@ public class Game
    public void setPossibleTurns(ArrayList<Turn> turns) {
       possibleTurns = turns;
    }
-   
+
    public void end(){
-   JButton replay = new JButton("Replay?");
-   replay.setFont(new Font("Arial", Font.PLAIN,40));
-   board.setVisible(false);
-   frame.add(replay,BorderLayout.CENTER);
-   frame.repaint();
-   replay.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent e) {
-         setupFrame();
-         start();
+      JButton replay = new JButton("Replay?");
+      replay.setFont(new Font("Arial", Font.PLAIN,40));
+      board.setVisible(false);
+      frame.add(replay,BorderLayout.CENTER);
+      frame.repaint();
+      replay.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            setupFrame();
+            start();
+         }
+      });
+   }
 
-
+   public int[] getScores(){
+      return score;
+   }
+   
+   public void findScore(Player p, Player op) {
+      if (board.countPieces(op.getColor()) > 15 && !board.checkHome(op.getColor())) {
+         p.setScore(3);
+      } else {
+         if (board.countPieces(op.getColor()) > 15 && board.checkHome(op.getColor())) {
+            p.setScore(2);
+         } else {
+            p.setScore(1);
+         }
       }
-   });
+   }
+   
+   public void choosePlayer(){ // work in progress chooseplayer code
+      JFrame c = new JFrame("Choose Player ");
+      c.setSize(800,700);
+      JPanel p = new JPanel();
+      JButton choosePlayer = new JButton("Two Players");
+      JButton chooseComputer = new JButton("Computer Player");
+      p.add(choosePlayer, BorderLayout.CENTER);
+      p.add(chooseComputer, BorderLayout.CENTER);
+      c.add(p, BorderLayout.CENTER);
+      choosePlayer.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            getPlayers();
+            c.dispose();
+//               start();
+         }
+      });
+      chooseComputer.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+//            getComputerPlayers();
+            c.dispose();
+//               start();
+         }
+      });
+      c.setVisible(true);
+
    }
 }

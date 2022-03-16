@@ -92,6 +92,27 @@ public class Board extends JPanel
             }
         }
     }
+    
+    public boolean checkHome(PlayerColor c){ //from liams score increment code
+        boolean check = true;
+        if(c == PlayerColor.BLACK){
+            for(int x = 0; x < 5; x++){
+                if(points[x].getCount() > 0){
+                    check = false;
+                }
+            }
+
+        }
+
+        if(c == PlayerColor.WHITE){
+            for(int x = 23; x > 17; x--){
+                if(points[x].getCount() > 0){
+                    check = false;
+                }
+            }
+        }
+        return check;
+    }
 
     //empty board
 
