@@ -35,71 +35,18 @@ public class Game
    }
 
    private void getPlayers() {
-      p1 = new Player(PlayerColor.WHITE, "Player 1");
-      p2 = new Player(PlayerColor.BLACK, "Player 2");
+      p1 = new Player(PlayerColor.WHITE, "Player 1", this);
+      p2 = new Player(PlayerColor.BLACK, "Player 2", this);
       score[0] = p1.getScore();
       score[1] = p2.getScore();
-   }
-   
-private void getComputerPlayers(){ // WIP getComputerPlayers for choosing player frame
-      p1 = new Player(PlayerColor.BLACK, "Player 1");
-//      p2 = new ComputerPlayer(PlayerColor.WHITE, "Player 2");
-      score[0] = p1.getScore();
-      score[1] = p2.getScore();
-   }
-   
-   private void switchActivePlayer() {
-      Player temp = p1;
-      p1 = p2;
-      p2 = temp;
-   }
-
-   public void start() {
-      getPlayers();
-      board.setInitialBoard();
-
-      do {
-         rolls = new int[]{p1.firstRoll(), p2.firstRoll()};
-      } while (rolls[0] == rolls[1]);
-
-      if (rolls[0] < rolls[1])
-         switchActivePlayer();
-
-      info.updateInfo();
-      System.out.println(Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]));
-      Turn(p1, p2);
-   }
-
-   public void Turn(Player active, Player opponent) {
-      do {
-         if (rolls.length == 0)
-            rolls = p1.RollTurn();
-
-         possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
-         if (rolls[0] == rolls[1]) {
-            rolls = new int[]{rolls[0], rolls[0], rolls[0], rolls[0]};
-         }
-
-         while (possibleTurns.size() != 0 || rolls.length != 0) {
-            info.updateInfo();
-            //TURN
-         }
-
-         if (Won(active))
-            break;
-         switchActivePlayer();
-      }while (true);
-      end();
-      findScore(active, opponent);
-
-   }
-
-   private boolean Won(Player p) {
-      return board.countPieces(p.getColor()) == 0;
    }
 
    public Player getActivePlayer() {
       return p1;
+   }
+
+   public Board getBoard() {
+      return board;
    }
 
    public int[] getRolls() {
@@ -118,6 +65,46 @@ private void getComputerPlayers(){ // WIP getComputerPlayers for choosing player
       possibleTurns = turns;
    }
 
+   public void start() {
+      getPlayers();
+      board.setInitialBoard();
+
+      do {
+         rolls = new int[]{p1.firstRoll(), p2.firstRoll()};
+      } while (rolls[0] == rolls[1]);
+
+      if (rolls[0] < rolls[1])
+         switchActivePlayer();
+
+      info.updateInfo();
+      Turn(p1, p2);
+   }
+
+   public void Turn(Player active, Player opponent) {
+      do {
+         if (rolls.length == 0)
+            rolls = p1.RollTurn();
+
+         possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
+         if (rolls[0] == rolls[1]) {
+            rolls = new int[]{rolls[0], rolls[0], rolls[0], rolls[0]};
+         }
+
+         while (possibleTurns.size() != 0 || rolls.length != 0) {
+            info.updateInfo();
+            p1.selectMove(possibleTurns);
+            //TURN
+         }
+
+         if (Won(active))
+            break;
+         switchActivePlayer();
+      }while (true);
+      end();
+      findScore(active, opponent);
+
+   }
+
    public void end(){
       JButton replay = new JButton("Replay?");
       replay.setFont(new Font("Arial", Font.PLAIN,40));
@@ -131,6 +118,16 @@ private void getComputerPlayers(){ // WIP getComputerPlayers for choosing player
             start();
          }
       });
+   }
+
+   private void switchActivePlayer() {
+      Player temp = p1;
+      p1 = p2;
+      p2 = temp;
+   }
+
+   private boolean Won(Player p) {
+      return board.countPieces(p.getColor()) == 0;
    }
 
    public int[] getScores(){

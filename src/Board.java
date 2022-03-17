@@ -12,20 +12,8 @@ public class Board extends JPanel
     private final Triangle[] points;
     private final Bar bar;
     private final Bar bearOff;
-    private Triangle selectedTriangle;
-    
-    public static BoardGeometry getGeometry() {
-        return BoardGeometry.getBoardGeometry();
-    }
+    private Position selectedPosition;
 
-    public Game getGame() {
-        return game;
-    }
-
-    public Bar getBar() {
-        return bar;
-    }
-    
     public Board(Game game) {
         super(null, true);
         this.game = game;
@@ -44,27 +32,48 @@ public class Board extends JPanel
             points[i] = new Triangle(0, null, i + 1, this);
         }
     }
-    
+
+    public static BoardGeometry getGeometry() {
+        return BoardGeometry.getBoardGeometry();
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public Bar getBar() {
+        return bar;
+    }
+
     public Triangle getPoint(int num) {
         return points[num - 1];
     }
 
-    public Triangle getPoint(int num, PlayerColor color) {
+    public Position getPoint(int num, PlayerColor color) {
+        if (num == 25 || num == 0) {
+            if (color == PlayerColor.WHITE) {
+                if (num == 0)
+                    return bearOff;
+                return bar;
+            }
+            else if (color == PlayerColor.BLACK) {
+                if (num == 25)
+                    return bearOff;
+                return bar;
+            }
+        }
+
         if (color == PlayerColor.WHITE)
             return getPoint(num);
         else return getPoint(25-num);
     }
 
-    public Triangle[] getAllPoints() {
-        return points;
+    public void setSelectedPosition(Position p) {
+        selectedPosition = p;
     }
 
-    public void setSelectedTriangle(Triangle t) {
-        selectedTriangle = t;
-    }
-
-    public Triangle getSelectedTriangle() {
-        return selectedTriangle;
+    public Position getSelectedPosition() {
+        return selectedPosition;
     }
 
     public void setInitialBoard() {
@@ -117,13 +126,11 @@ public class Board extends JPanel
         return check;
     }
 
-    //empty board
-
     public int countPieces(PlayerColor c) {
         int count = bar.getCount(c);
 
         for (Triangle point : points) {
-            if (point.getColor() == c)
+            if (point.getPieceColor() == c)
                 count += point.getCount();
         }
 
@@ -155,6 +162,15 @@ public class Board extends JPanel
         to.addPiece(getGame().getActivePlayer().getColor());
         game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));
         repaint();
+    }
+
+    public void highlightMoves(Color color) {
+        ArrayList<Turn> turns = getGame().getPossibleTurns();
+
+        for (Turn turn : turns) {
+            if (turn.getMoves()[0].getFrom().getPointNumber() == selectedPosition.getPointNumber())
+                turn.getMoves()[0].getTo().addHighlight(color);
+        }
     }
 
     public void clearHighlights() {

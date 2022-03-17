@@ -5,19 +5,25 @@ public class Bar extends BarGraphics implements Position
 {
     private int whiteCount;
     private int blackCount;
-    
+    private int type;
+    private Board board;
+
+    public Bar(final Board gui, int num) {
+        super(gui, num);
+        this.setBlackCount(0);
+        this.setWhiteCount(0);
+        type = num;
+        board = gui;
+
+        addMouseListener(new TriangleListener());
+    }
+
     public void setBlackCount(final int blackCount) {
         this.blackCount = blackCount;
     }
     
     public void setWhiteCount(final int whiteCount) {
         this.whiteCount = whiteCount;
-    }
-    
-    public Bar(final Board gui, int num) {
-        super(gui, num);
-        this.setBlackCount(0);
-        this.setWhiteCount(0);
     }
 
     public int getCount(PlayerColor playerColor){
@@ -48,12 +54,26 @@ public class Bar extends BarGraphics implements Position
 
     @Override
     public int getPointNumber() {
-        return 25;
+        PlayerColor color = board.getGame().getActivePlayer().getColor();
+
+        if (color == PlayerColor.WHITE)
+            return 25 * type;
+        else return 25 * Math.abs(type - 1);
     }
 
     @Override
-    public void addHighlight() {
-        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.GREEN));
+    public PlayerColor getPieceColor() {
+        return board.getGame().getActivePlayer().getColor();
+    }
+
+    @Override
+    public Board getBoard() {
+        return board;
+    }
+
+    @Override
+    public void addHighlight(Color color) {
+        setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, color));
         repaint();
     }
 

@@ -1,7 +1,9 @@
 public interface Position {
     void addPiece(PlayerColor color);
     void removePiece(PlayerColor color);
+    PlayerColor getPieceColor();
     int getPointNumber();
-    void addHighlight();
+    Board getBoard();
+    void addHighlight(java.awt.Color color);
     void removeHighlight();
 }

@@ -33,7 +33,7 @@ public class Move {
         for (int i = 0; i < 24; i++) {
             Triangle point = b.getPoint(i + 1);
             temp[i] = point.getCount();
-            if (color.equals(point.getColor()))
+            if (color.equals(point.getPieceColor()))
                 temp[i] *= -1;
         }
         if (color.equals(PlayerColor.WHITE))
@@ -68,6 +68,7 @@ public class Move {
             }
         }
 
+        System.out.println(newTurns);
         return newTurns;
     }
 
@@ -96,6 +97,7 @@ public class Move {
             addTurn(turns, getTurnString(highest + 1, 0));
         }
 
+        System.out.println(turns);
         return turns;
     }
 

@@ -1,19 +1,28 @@
+import java.util.ArrayList;
+import java.util.Random;
+
 public class ComputerPlayer extends Player{
-    public ComputerPlayer(PlayerColor c, String name) {
-        super(c, name);
+    private PlayerColor playerColor;
+    private String name;
+    private int score;
+    private Game game;
+
+    public ComputerPlayer(PlayerColor c, String name, Game game) {
+        super(c, name, game);
+        playerColor = c;
+        this.name = name;
+        score = 0;
+        this.game = game;
     }
     @Override
-    public void SelectMove(Turn[] turns) {
+    public void selectMove(ArrayList<Turn> turns) {
+        Random rng = new Random();
+        int num = rng.nextInt(turns.size());
 
-//        int count = Move.getPossibleMoves().length;
-//        Random randomNum = new Random();
-//        int num = randomNum.nextInt(turns.length-1);
-//
-//                for (Move m: turns[num]){
-//                    Board.makeMove(m);
-//                }
-//
-
+        Turn turn = turns.get(num);
+        for (Move move : turns.get(num).getMoves()) {
+            game.getBoard().makeMove(move.getFrom(), move.getTo());
+        }
     }
 }
 

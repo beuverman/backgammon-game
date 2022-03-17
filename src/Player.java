@@ -1,12 +1,16 @@
+import java.util.ArrayList;
+
 public class Player {
     private PlayerColor playerColor;
     private String name;
     private int score;
+    private Game game;
 
-    public Player(PlayerColor c, String name){
+    public Player(PlayerColor c, String name, Game game){
         playerColor = c;
         this.name = name;
         score = 0;
+        this.game = game;
     }
 
     public PlayerColor getColor() {
@@ -38,7 +42,7 @@ public class Player {
         score = score + x;
     }
     
-    public void SelectMove(Turn [] turns){
+    public void selectMove(ArrayList<Turn> turns){
 
 
     }
