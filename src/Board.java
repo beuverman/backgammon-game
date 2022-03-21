@@ -45,27 +45,12 @@ public class Board extends JPanel
         return bar;
     }
 
-    public Triangle getPoint(int num) {
-        return points[num - 1];
+    public Bar getBearOff() {
+        return bearOff;
     }
 
-    public Position getPoint(int num, PlayerColor color) {
-        if (num == 25 || num == 0) {
-            if (color == PlayerColor.WHITE) {
-                if (num == 0)
-                    return bearOff;
-                return bar;
-            }
-            else if (color == PlayerColor.BLACK) {
-                if (num == 25)
-                    return bearOff;
-                return bar;
-            }
-        }
-
-        if (color == PlayerColor.WHITE)
-            return getPoint(num);
-        else return getPoint(25-num);
+    public Triangle getPoint(int num) {
+        return points[num - 1];
     }
 
     public void setSelectedPosition(Position p) {
@@ -177,6 +162,7 @@ public class Board extends JPanel
         for (Triangle t : points)
             t.removeHighlight();
         bar.removeHighlight();
+        bearOff.removeHighlight();
         repaint();
     }
 

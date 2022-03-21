@@ -43,8 +43,6 @@ public class Player {
     }
     
     public void selectMove(ArrayList<Turn> turns){
-
-
     }
 
 }

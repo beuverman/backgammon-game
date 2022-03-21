@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Move {
     private Position from;
@@ -68,6 +69,8 @@ public class Move {
             }
         }
 
+        parseBoard(b, b.getGame().getActivePlayer().getColor());
+        System.out.print(Arrays.toString(board) + " : ");
         System.out.println(newTurns);
         return newTurns;
     }
@@ -97,6 +100,8 @@ public class Move {
             addTurn(turns, getTurnString(highest + 1, 0));
         }
 
+        parseBoard(b, b.getGame().getActivePlayer().getColor());
+        System.out.print(Arrays.toString(board) + " : ");
         System.out.println(turns);
         return turns;
     }
@@ -180,21 +185,43 @@ public class Move {
     }
 
     private static Turn getTurnString(int from, int to) {
-        return new Turn(new Move[]{new Move(b.getPoint(from, color), b.getPoint(to, color))});
+        Position f = findPosition(from);
+        Position t = findPosition(to);
+        return new Turn(new Move[]{new Move(f, t)});
     }
 
     private static Turn getTurnString(int from1, int to1, int from2, int to2) {
-        return new Turn(new Move[]{new Move(b.getPoint(from1, color), b.getPoint(to1, color)), new Move(b.getPoint(from2, color), b.getPoint(to2, color))});
+        Position f1 = findPosition(from1);
+        Position t1 = findPosition(to1);
+        Position f2 = findPosition(from2);
+        Position t2 = findPosition(to2);
+
+        return new Turn(new Move[]{new Move(f1, t1), new Move(f2, t2)});
     }
 
     private static Turn getTurnString(int[] from, int roll) {
         Move[] moves = new Move[from.length];
+        Position f;
+        Position t;
 
         for (int i = 0; i < from.length; i++) {
-            moves[i] = new Move(b.getPoint(from[i], color), b.getPoint(from[i] - roll, color));
+            f = findPosition(from[i]);
+            t = findPosition(from[i] - roll);
+            moves[i] = new Move(f, t);
         }
 
         return new Turn(moves);
+    }
+
+    private static Position findPosition(int pos) {
+        if (pos == 25)
+            return b.getBar();
+        if (pos == 0)
+            return b.getBearOff();
+
+        if (b.getGame().getActivePlayer().getColor() == PlayerColor.BLACK)
+            return b.getPoint(25 - pos);
+        return b.getPoint(pos);
     }
 
     private static void addTurn(ArrayList<Turn> turns, Turn turn) {
@@ -229,23 +256,4 @@ public class Move {
         }
         return temp;
     }
-
-//    public boolean isLegal(Board board, PlayerColor color) {
-//        int point1 = from.getPointNumber();
-//        int point2 = to.getPointNumber();
-//
-//        if (from.getColor() != color) return false;
-//        else if (point2 - point1 < 0) return false;
-//        else if (board.getBar().getCount(color) != 0) return false;
-//
-//        if (point2 - point1 == 0) {
-//            for (int i = 7; i <= 24; i++) {
-//                if (!color.equals(board.getPoint(i).getColor()) || board.getPoint(i).getCount() == 0) {
-//                    return false;
-//                }
-//            }
-//        } else if (!color.equals(to.getColor()) && to.getCount() > 1) return false;
-//
-//        return true;
-//    }
 }

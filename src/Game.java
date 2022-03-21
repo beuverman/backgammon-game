@@ -49,12 +49,15 @@ public class Game
       return board;
    }
 
+   public InfoPanel getInfoPanel() {return info;}
+
    public int[] getRolls() {
       return rolls;
    }
 
    public void setRolls(int[] rolls) {
       this.rolls = rolls;
+      info.updateInfo();
    }
 
    public ArrayList<Turn> getPossibleTurns() {
@@ -70,7 +73,7 @@ public class Game
       board.setInitialBoard();
 
       do {
-         rolls = new int[]{p1.firstRoll(), p2.firstRoll()};
+         setRolls(new int[]{p1.firstRoll(), p2.firstRoll()});
       } while (rolls[0] == rolls[1]);
 
       if (rolls[0] < rolls[1])
@@ -83,15 +86,16 @@ public class Game
    public void Turn(Player active, Player opponent) {
       do {
          if (rolls.length == 0)
-            rolls = p1.RollTurn();
+            setRolls(p1.RollTurn());
 
          possibleTurns = Move.getPossibleTurns(board, getActivePlayer().getColor(), rolls[0], rolls[1]);
          if (rolls[0] == rolls[1]) {
-            rolls = new int[]{rolls[0], rolls[0], rolls[0], rolls[0]};
+            setRolls(new int[]{rolls[0], rolls[0], rolls[0], rolls[0]});
          }
 
+         info.updateInfo();
          while (possibleTurns.size() != 0 || rolls.length != 0) {
-            info.updateInfo();
+            //info.updateInfo();
             p1.selectMove(possibleTurns);
             //TURN
          }
@@ -100,9 +104,9 @@ public class Game
             break;
          switchActivePlayer();
       }while (true);
+
       end();
       findScore(active, opponent);
-
    }
 
    public void end(){
