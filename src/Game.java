@@ -93,9 +93,8 @@ public class Game
             setRolls(new int[]{rolls[0], rolls[0], rolls[0], rolls[0]});
          }
 
-         info.updateInfo();
          while (possibleTurns.size() != 0 || rolls.length != 0) {
-            //info.updateInfo();
+            info.updateInfo();
             p1.selectMove(possibleTurns);
             //TURN
          }

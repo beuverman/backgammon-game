@@ -1,13 +1,6 @@
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.Graphics;
-import java.awt.Polygon;
-import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
+import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public class Triangle extends JComponent implements Position {
     private final Board board;
@@ -26,7 +19,7 @@ public class Triangle extends JComponent implements Position {
         setBounds(Board.getGeometry().getPointRectangle(pointNumber));
         polygon = getTriangle();
 
-        addMouseListener(/*addListener()*/new TriangleListener());
+        addMouseListener(new TriangleListener());
     }
 
     public int getCount(){
@@ -73,6 +66,10 @@ public class Triangle extends JComponent implements Position {
         if (pieceCount == 0)
             pieceColour = null;
     }
+
+    //**************************************************
+    //GRAPHICS
+    //**************************************************
 
     @Override
     public void addHighlight(Color color) {

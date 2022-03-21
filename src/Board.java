@@ -1,10 +1,6 @@
-import java.awt.Graphics2D;
-import java.awt.Graphics;
-import javax.swing.BorderFactory;
-import java.awt.Color;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
-import javax.swing.JPanel;
 
 public class Board extends JPanel
 {
@@ -148,6 +144,10 @@ public class Board extends JPanel
         game.setPossibleTurns(Move.reducePossibleTurns(this, turns, from, to));
         repaint();
     }
+
+    //**************************************************
+    //GRAPHICS
+    //**************************************************
 
     public void highlightMoves(Color color) {
         ArrayList<Turn> turns = getGame().getPossibleTurns();

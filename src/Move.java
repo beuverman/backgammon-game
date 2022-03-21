@@ -26,6 +26,10 @@ public class Move {
         return from.getPointNumber() + "-" + to.getPointNumber();
     }
 
+    //**************************************************
+    //GET ALL POSSIBLE TURNS
+    //**************************************************
+
     private static void parseBoard(Board b, PlayerColor color) {
         Move.b = b;
         int[] temp = new int[24];
@@ -69,7 +73,7 @@ public class Move {
             }
         }
 
-        parseBoard(b, b.getGame().getActivePlayer().getColor());
+        parseBoard(b, color);
         System.out.print(Arrays.toString(board) + " : ");
         System.out.println(newTurns);
         return newTurns;
@@ -80,58 +84,30 @@ public class Move {
         color = c;
         ArrayList<Turn> turns = new ArrayList<>();
 
-        getTwoRollTurns(turns, r1, r2);
-        getTwoRollTurns(turns, r2, r1);
-
-        //Can only make one roll
-        if (turns.size() == 0) {
-            r1 = Math.max(r1, r2);
-
-            for (int i = 0; i < board.length; i++) {
-                if (isLegalMove(i, r1)) {
-                    addTurn(turns, getTurnString(i + 1, i + 1 - r1));
-                }
-            }
+        if (r1 == r2) {
+            doubleRolls(turns, r1);
+        }
+        else {
+            twoRolls(turns, r1, r2);
+            twoRolls(turns, r2, r1);
         }
 
-        //Bearing off highest point
-        if (turns.size() == 0) {
-            int highest = getHighestPoint();
-            addTurn(turns, getTurnString(highest + 1, 0));
-        }
-
-        parseBoard(b, b.getGame().getActivePlayer().getColor());
-        System.out.print(Arrays.toString(board) + " : ");
-        System.out.println(turns);
+        System.out.println(Arrays.toString(board) + " : " + turns);
         return turns;
     }
 
-    private static void getTwoRollTurns(ArrayList<Turn> fullList, int r1, int r2) {
+    private static void twoRolls(ArrayList<Turn> fullList, int r1, int r2) {
         ArrayList<Turn> turns = new ArrayList<>();
-        boolean flag;
+        ArrayList<Move> moves1;
+        ArrayList<Move> moves2;
+        int[] tempBoard = board.clone();
 
-        for (int i = 0; i < board.length; i++) {
-            flag = true;
-            if (isLegalMove(i, r1)) {
-                makeMove(i, i - r1);
-                for (int j = 0; j < board.length; j++) {
-                    if (isLegalMove(j, r2)) {
-                        flag = false;
-                        if (r1 == r2) {
-                            makeMove(j, j - r2);
-                            doubleExtensionLoop(turns, i, j, r1);
-                            makeMove(j - r2, j);
-                        }
-                        else
-                            addTurn(turns, getTurnString(i + 1, i + 1 - r1, j + 1, j + 1 - r2));
-                    }
-                }
-                if (flag) {
-                    int highest = getHighestPoint();
-                    if (highest - r2 < 0)
-                        addTurn(turns, getTurnString(i+1, i+1-r1, highest+1, 0));
-                }
-                makeMove(i - r1, i);
+        moves1 = getNextMove(tempBoard, r2);
+        for (Move move1 : moves1) {
+            tempBoard = makeMove(tempBoard, move1);
+            moves2 = getNextMove(tempBoard, r1);
+            for (Move move2 : moves2) {
+                addTurn(turns, createTurn(move1.getFrom(), move1.getTo(), move2.getFrom(), move2.getTo()));
             }
         }
 
@@ -139,37 +115,48 @@ public class Move {
             addTurn(fullList, turn);
     }
 
-    private static void doubleExtensionLoop(ArrayList<Turn> fullList, int from1, int from2, int roll) {
+    private static void doubleRolls(ArrayList<Turn> fullList, int r) {
         ArrayList<Turn> turns = new ArrayList<>();
+        ArrayList<Move> moves1;
+        ArrayList<Move> moves2;
+        ArrayList<Move> moves3;
+        ArrayList<Move> moves4;
+        int[] tempBoard = board.clone();
 
-        for (int i = 0; i < board.length; i++) {
-            if (isLegalMove(i, roll)) {
-                makeMove(i, i - roll);
-                for (int j = 0; j < board.length; j++) {
-                    if (isLegalMove(j, roll)) {
-                        addTurn(turns, getTurnString(new int[]{from1+1, from2+1, i+1, j+1}, roll));
+        moves1 = getNextMove(tempBoard, r);
+        for (Move move1 : moves1) {
+            tempBoard = makeMove(tempBoard, move1);
+            moves2 = getNextMove(tempBoard, r);
+            for (Move move2 : moves2) {
+                tempBoard = makeMove(tempBoard, move2);
+                moves3 = getNextMove(tempBoard, r);
+                for (Move move3 : moves3) {
+                    tempBoard = makeMove(tempBoard, move3);
+                    moves4 = getNextMove(tempBoard, r);
+                    for (Move move4 : moves4) {
+                        addTurn(turns, new Turn(new Move[]{move1, move2, move3, move4}));
                     }
                 }
-                makeMove(i - roll, i);
             }
         }
-
-        if (turns.size() == 0) {
-            for (int i = 0; i < board.length; i++) {
-                if (isLegalMove(i, roll)) {
-                    addTurn(turns, getTurnString(new int[]{from1+1, from2+1, i+1}, roll));
-                }
-            }
-        }
-
-        if (turns.size() == 0)
-            addTurn(turns, getTurnString(new int[]{from1+1, from2+1}, roll));
 
         for (Turn turn : turns)
             addTurn(fullList, turn);
     }
 
-    public static boolean isLegalMove(int point, int roll) {
+    private static ArrayList<Move> getNextMove(int[] board, int roll) {
+        ArrayList<Move> moves = new ArrayList<>();
+
+        for (int i = 0; i < board.length; i++) {
+            if (isLegalMove(board, i, roll)) {
+                moves.add(new Move(intToPosition(i), intToPosition(i - roll)));
+            }
+        }
+
+        return moves;
+    }
+
+    private static boolean isLegalMove(int[] board, int point, int roll) {
         if (board[point] < 1) return false; //Selected point has your pieces
         else if (point - roll < -1) return false; //Move to point exists
         else if (board[24] > 0 && point != 24) return false; //Bar is empty
@@ -184,44 +171,49 @@ public class Move {
         return true;
     }
 
-    private static Turn getTurnString(int from, int to) {
-        Position f = findPosition(from);
-        Position t = findPosition(to);
-        return new Turn(new Move[]{new Move(f, t)});
+    private static Turn createTurn(Position from1, Position to1, Position from2, Position to2) {
+        return new Turn(new Move[]{new Move(from1, to1), new Move(from2, to2)});
     }
 
-    private static Turn getTurnString(int from1, int to1, int from2, int to2) {
-        Position f1 = findPosition(from1);
-        Position t1 = findPosition(to1);
-        Position f2 = findPosition(from2);
-        Position t2 = findPosition(to2);
-
-        return new Turn(new Move[]{new Move(f1, t1), new Move(f2, t2)});
-    }
-
-    private static Turn getTurnString(int[] from, int roll) {
-        Move[] moves = new Move[from.length];
-        Position f;
-        Position t;
-
-        for (int i = 0; i < from.length; i++) {
-            f = findPosition(from[i]);
-            t = findPosition(from[i] - roll);
-            moves[i] = new Move(f, t);
-        }
-
-        return new Turn(moves);
-    }
-
-    private static Position findPosition(int pos) {
-        if (pos == 25)
+    private static Position intToPosition(int pos) {
+        if (pos == 24)
             return b.getBar();
-        if (pos == 0)
+        if (pos == -1)
             return b.getBearOff();
 
         if (b.getGame().getActivePlayer().getColor() == PlayerColor.BLACK)
-            return b.getPoint(25 - pos);
-        return b.getPoint(pos);
+            return b.getPoint(24 - pos);
+        return b.getPoint(pos + 1);
+    }
+
+    private static int PositionToInt(Position pos) {
+        if (pos.equals(b.getBar()))
+            return 24;
+        if (pos.equals(b.getBearOff()))
+            return -1;
+
+        if (color == PlayerColor.BLACK)
+            return 24 - pos.getPointNumber();
+        return pos.getPointNumber() - 1;
+    }
+
+    private static int[] makeMove(int[] board, int from, int to) {
+        int[] newBoard = board.clone();
+
+        if (from >= 0) {
+            newBoard[from]--;
+        }
+        if (to >= 0) {
+            if (newBoard[to] == -1)
+                newBoard[to]++;
+            newBoard[to]++;
+        }
+
+        return newBoard;
+    }
+
+    private static int[] makeMove(int[] board, Move move) {
+        return makeMove(board, PositionToInt(move.getFrom()), PositionToInt(move.getTo()));
     }
 
     private static void addTurn(ArrayList<Turn> turns, Turn turn) {
@@ -230,13 +222,6 @@ public class Move {
         }
 
         turns.add(turn);
-    }
-
-    public static void makeMove(int from, int to) {
-        if (from > 0)
-            board[from]--;
-        if (to > 0)
-            board[to]++;
     }
 
     private static int getHighestPoint() {

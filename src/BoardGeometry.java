@@ -1,7 +1,5 @@
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
 
 public class BoardGeometry
 {

@@ -71,6 +71,10 @@ public class Bar extends BarGraphics implements Position
         return board;
     }
 
+    //**************************************************
+    //GRAPHICS
+    //**************************************************
+
     @Override
     public void addHighlight(Color color) {
         setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, color));
